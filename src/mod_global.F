@@ -38,7 +38,7 @@ MODULE GLOBAL
     LOGICAL :: IMPLICIT = .TRUE.
     LOGICAL :: SUBGRID_UV_CORRECTION = .TRUE.
     LOGICAL :: CONSTRUCT_SUBGRID_UV = .TRUE.
-    CHARACTER(LEN=15)::FORMAT_LEN
+    CHARACTER(LEN=14)::FORMAT_LEN
     CHARACTER(LEN=14)::FORMAT_LEN_SUB
 
 ! some physical and numerical variables
@@ -49,7 +49,7 @@ MODULE GLOBAL
     REAL(SP) :: FroudeCap=10.0_SP
     REAL(SP) :: SWE_ETA_DEP=0.7_SP
     REAL(SP) :: NU=0.02_SP
-    REAL(SP) :: MaxDepth
+                         REAL(SP) :: MaxDepth
 
 ! some global variables
 ! Mloc1=Mloc+1, Nloc1=Nloc+1
@@ -329,6 +329,8 @@ MODULE GLOBAL
     INTEGER,DIMENSION(:,:),ALLOCATABLE :: Kbeg_por,Kend_por, GrdType
     REAL(SP),DIMENSION(:,:),ALLOCATABLE :: PorMeanSqErr,PorMeanAbsErr,PorMaxAbsErr
 # endif
+
+
 
 ! debug
 # if defined(DEBUG)

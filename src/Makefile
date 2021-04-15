@@ -22,7 +22,6 @@
 #            FLAG_12 = -DECO_MORPHOLOGY
 #            FLAG_13 = -DFREESLIP_BC
              FLAG_15 = -DSUBSURFACE
-#            FLAG_16 = -DMULTIRELATIONSHIP
 #--------------------------------------------------------------------------
 #  mpi defs 
 #--------------------------------------------------------------------------
@@ -68,9 +67,9 @@
 #  SUBGRID Source Code.
 #--------------------------------------------------------------------------
 
-MODS  = mod_param.F mod_global.F mod_util.F mod_subsurface.F \
+MODS  = mod_param.F mod_global.F mod_util.F mod_subsurface.F\
 
-MAIN  = kernel.F init.F io.F subgrid.F bc_exchange.F coupling.F polyfit.F sed.F sed_bc.F biomass.F river.F tide.F \
+MAIN  = kernel.F init.F io.F subgrid.F bc_exchange.F coupling.F polyfit.F sed.F sed_bc.F biomass.F river.F tide.F\
 
 SRCS = $(MODS)  $(MAIN)
 

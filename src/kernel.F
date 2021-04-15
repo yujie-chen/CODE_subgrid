@@ -74,6 +74,7 @@ PROGRAM SUBGRID_MODEL
 ! subsurface
 
 
+
   DO WHILE (TIME<TOTAL_TIME) ! begin main loop
 
    CALL UPDATE_MASKS
@@ -105,7 +106,7 @@ PROGRAM SUBGRID_MODEL
    ! tide boundary
    IF(TIDE_CLAMPED)THEN
     CALL TIDE_BC
-    CALL FILLIN_ETA_GHOST
+                         CALL FILLIN_ETA_GHOST
 # if defined (DEBUG)
 #    if defined (PARALLEL)
        IF(myid==0) WRITE(*,*) 'TIDE_BC'     
@@ -488,8 +489,7 @@ SUBROUTINE UPDATE_MASKS
  if ( n_west .eq. MPI_PROC_NULL.and.n_east .ne. MPI_PROC_NULL ) then
   DO J=1,Nloc
   DO I=Ibeg+1,Mloc1
-  ! IF(H_u(I,J)>MinDepth)THEN
-   IF(H_u(I,J)>ZERO)THEN
+   IF(H_u(I,J)>MinDepth)THEN
     MASKu(I,J)=1
    ELSE
     MASKu(I,J)=0
@@ -499,8 +499,7 @@ SUBROUTINE UPDATE_MASKS
  else if ( n_west .eq. MPI_PROC_NULL.and.n_east .eq. MPI_PROC_NULL ) then
   DO J=1,Nloc
   DO I=Ibeg+1,Iend1-1
-!   IF(H_u(I,J)>MinDepth)THEN
-   IF(H_u(I,J)>ZERO)THEN
+   IF(H_u(I,J)>MinDepth)THEN
     MASKu(I,J)=1
    ELSE
     MASKu(I,J)=0
@@ -510,8 +509,7 @@ SUBROUTINE UPDATE_MASKS
  else if ( n_west .ne. MPI_PROC_NULL.and.n_east .eq. MPI_PROC_NULL ) then
   DO J=1,Nloc
   DO I=1,Iend1-1
- !  IF(H_u(I,J)>MinDepth)THEN
-   IF(H_u(I,J)>ZERO)THEN
+   IF(H_u(I,J)>MinDepth)THEN
     MASKu(I,J)=1
    ELSE
     MASKu(I,J)=0
@@ -522,8 +520,7 @@ SUBROUTINE UPDATE_MASKS
   else
   DO J=1,Nloc
   DO I=1,Mloc1
-!   IF(H_u(I,J)>MinDepth)THEN
-   IF(H_u(I,J)>ZERO)THEN
+   IF(H_u(I,J)>MinDepth)THEN
     MASKu(I,J)=1
    ELSE
     MASKu(I,J)=0
@@ -537,8 +534,7 @@ SUBROUTINE UPDATE_MASKS
   if ( n_suth .eq. MPI_PROC_NULL.and.n_nrth .ne. MPI_PROC_NULL ) then
   DO J=Jbeg+1,Nloc1
   DO I=1,Mloc
-!   IF(H_v(I,J)>MinDepth)THEN
-   IF(H_v(I,J)>ZERO)THEN
+   IF(H_v(I,J)>MinDepth)THEN
     MASKv(I,J)=1
    ELSE
     MASKv(I,J)=0
@@ -550,8 +546,7 @@ SUBROUTINE UPDATE_MASKS
 
   DO J=Jbeg+1,Jend1-1
   DO I=1,Mloc
-!   IF(H_v(I,J)>MinDepth)THEN
-   IF(H_v(I,J)>ZERO)THEN
+   IF(H_v(I,J)>MinDepth)THEN
     MASKv(I,J)=1
    ELSE
     MASKv(I,J)=0
@@ -563,8 +558,7 @@ SUBROUTINE UPDATE_MASKS
 
   DO J=1,Jend1-1
   DO I=1,Mloc
- !  IF(H_v(I,J)>MinDepth)THEN
-   IF(H_v(I,J)>ZERO)THEN
+   IF(H_v(I,J)>MinDepth)THEN
     MASKv(I,J)=1
    ELSE
     MASKv(I,J)=0
@@ -575,8 +569,7 @@ SUBROUTINE UPDATE_MASKS
   else
   DO J=1,Nloc1
   DO I=1,Mloc
-!   IF(H_v(I,J)>MinDepth)THEN
-   IF(H_v(I,J)>ZERO)THEN
+   IF(H_v(I,J)>MinDepth)THEN
     MASKv(I,J)=1
    ELSE
     MASKv(I,J)=0
@@ -624,8 +617,7 @@ SUBROUTINE UPDATE_MASKS
 
   DO J=1,Nloc
   DO I=Ibeg+1,Iend1-1
-!   IF(H_u(I,J)>MinDepth)THEN
-   IF(H_u(I,J)>ZERO)THEN
+   IF(H_u(I,J)>MinDepth)THEN
     MASKu(I,J)=1
    ELSE
     MASKu(I,J)=0
@@ -636,8 +628,7 @@ SUBROUTINE UPDATE_MASKS
 
   DO J=Jbeg+1,Jend1-1
   DO I=1,Mloc
- !  IF(H_v(I,J)>MinDepth)THEN
-   IF(H_v(I,J)>ZERO)THEN
+   IF(H_v(I,J)>MinDepth)THEN
     MASKv(I,J)=1
    ELSE
     MASKv(I,J)=0
@@ -764,7 +755,6 @@ SUBROUTINE CALCULATE_H_PQ_UV
 # if defined (SUBSURFACE) 
 !$$$
                IF(MASKu(I,J)==0)THEN
-!                IF(MASKu(I,J)==0.AND.MASK(I,J)==0)THEN
                  P(I,J)=P_ground(I,J)
                  U(I,J) =P(I,J)/MAX(MinDepth,Du_ground(I,J))
                ELSE
@@ -2030,7 +2020,7 @@ SUBROUTINE HOPSCOTCH_SCHEME
                    incr1=incr1+DT/DY*Q_ground(I,J)
                  ENDIF
                  IF(MASK(I,J)>0.AND.MASKv(I,J+1)==0)THEN
-                   incr1=incr1-DT/DY*Q_ground(I,J+1)
+                   incr1=incr1+DT/DY*Q_ground(I,J+1)
                  ENDIF
 
 # endif
@@ -2134,7 +2124,8 @@ SUBROUTINE HOPSCOTCH_SCHEME
 # endif
 # endif
 
-    CALL FILLIN_ETA_GHOST
+        CALL FILLIN_ETA_GHOST
+
 
 END SUBROUTINE HOPSCOTCH_SCHEME
 
